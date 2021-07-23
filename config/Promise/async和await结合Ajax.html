@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>async和await结合Ajax</title>
+</head>
+<button id="btn">提交</button>
+
+<body>
+    <script>
+        /**
+ * 封装 ajax请求方法
+ * @url   文件路径
+ * @callback 回调函数 （也可不传 直接链式调用 then()）
+ */
+
+        function Ajax(url, callback) {
+            return new Promise((resolve, reject) => {
+                // 对象
+                const xhr = new XMLHttpRequest();
+                // 地址
+                xhr.open("GET", url, true);
+                // 设置请求头  身份校验的信息放在请求头里面 有服务器对参数提取 身份做验证
+                // xhr.setRequestHeader("Context-Type", "application/x-www-form-urlencoded");
+                // 发送
+                xhr.send()
+                // 绑定事件
+                xhr.onreadystatechange = function () {
+                    // 判断响应码
+                    if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status < 300) {
+                        var content = JSON.parse(xhr.responseText)
+                        callback && callback(content);
+                        resolve(content)
+                    }
+                }
+                xhr.onerror = (err) => {
+                    reject(err)
+                }
+            })
+
+        }
+
+        document.getElementById("btn").addEventListener('click', async function () {
+            let data = await Ajax('https://api.apiopen.top/getJoke')
+            console.log(data.result);
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>自定义封装Promise</title>
+	<script src="./promise.js"></script>
+</head>
+
+<body>
+	<script>
+		// let p = new Promise((resolve, reject) => {
+		// 	setTimeout(() => {
+		// 		resolve("成功")
+		// 		// reject('失败的')
+		// 	}, 1000)
+
+		// })
+		// let res =p
+		// 		.then()
+		// 		.then((value) => {
+		// 			console.log("222")
+		// 			// throw "失败了"
+		// 		})
+		// 		.then((value) => {
+		// 			console.log("333")
+
+		// 		}).catch(reason=>{
+		// 			console.log(reason)
+		// 		})
+
+		// console.log(res);
+
+		const p1 = Promise.reject('ss')
+		const p2 = Promise.resolve(new Promise((resolve, reject) => {
+			resolve("ok")
+			// throw "error"
+		}))
+		console.log(p1);
+		console.log(p2);
+
+	</script>
+</body>
+
+</html>

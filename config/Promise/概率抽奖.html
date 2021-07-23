@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>概率抽奖</title>
+</head>
+
+<body>
+
+	<div class="box">
+		<h2>概率抽奖</h2>
+		<button class="btn">抽奖</button>
+	</div>
+	<script>
+		function rand(min, max) {
+			return  parseInt(Math.random() * (max - min) + min)
+		}
+		const btn = document.getElementsByClassName("btn")[0]
+
+		
+		btn.onclick = function () {
+			const p = new Promise((resolve, reject) => {
+			setTimeout(() => {
+				let num = rand(1, 100)
+				if (num <= 30) {
+					resolve(num)
+				} else {
+					reject(num)
+				}
+			}, 1000)
+
+		})
+			p.then((value) => {
+				alert("中大奖了:" + value)
+
+			}, (data) => {
+				alert("再接再厉:" + data) 
+
+			})
+		}
+
+	</script>
+</body>
+
+</html>

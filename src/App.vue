@@ -1,0 +1,21 @@
+<template>
+  <div id="app">
+    <router-view />
+    <!-- 底部按钮  v-show="$route.meta.isShow" 底部按钮的显示与隐藏 比如进入商家或者登录页面-->
+    <FooterGuide v-show="$route.meta.isShow" />
+  </div>
+</template>
+<script>
+import FooterGuide from './components/FooterGuide/footerguide.vue'
+export default {
+  name: 'App',
+  components: { FooterGuide }
+}
+</script>
+<style  lang="stylus" rel="stylesheet/stylus">
+.app {
+  width: 100%;
+  height: 100%;
+  background: #f5f5f5;
+}
+</style>
