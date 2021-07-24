@@ -1,4 +1,3 @@
-
 /*
 ajax 请求函数模块
 返回的是一个Premise对象 (异步返回的数据是: response.data)
@@ -7,7 +6,6 @@ import axios from 'axios'
 
 export default function ajax (url, data = {}, type = 'GET') {
   return new Promise((resolve, reject) => {
-    // eslint-disable-next-line no-unused-vars
     let promise
     if (type === 'GET') {
       // 准备 url query 参数数据
