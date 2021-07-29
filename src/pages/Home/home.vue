@@ -2,18 +2,22 @@
   <!--首页外卖-->
   <section class="msite">
     <headertop :title="title">
-      <span class="header_search"
-            slot="left">
+      <router-link class="header_search"
+                   to="/search"
+                   slot="left">
         <i class="iconfont icon-sousuo"></i>
-      </span>
-      <span class="header_login"
-            slot="right">
-        <span class="header_login_text">登录 | 注册</span>
-      </span>
+      </router-link>
+      <router-link class="header_login"
+                   :to="userinfo._id?'/userinfo':'/login'"
+                   slot="right">
+        <span class="header_login_text" v-if="!userinfo._id">登录 | 注册</span>
+        <span class="header_login_text" v-else><i class="iconfont icon-person"></i></span>
+      </router-link>
     </headertop>
     <!--首页导航-->
-    <nav class="msite_nav" >
-      <div class="swiper-container" v-if="foodlistsArr.length">
+    <nav class="msite_nav">
+      <div class="swiper-container"
+           v-if="foodlistsArr.length">
         <div class="swiper-wrapper">
           <div class="swiper-slide"
                v-for="(foodlists, index) in foodlistsArr"
@@ -32,7 +36,9 @@
         <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
       </div>
-      <img v-else src="./images/msite_back.svg" alt="back">
+      <img v-else
+           src="./images/msite_back.svg"
+           alt="back">
     </nav>
     <!--首页附近商家-->
     <div class="msite_shop_list">
@@ -66,7 +72,7 @@ export default {
     this.$store.dispatch('getshops')
   },
   computed: {
-    ...mapState(['address', 'foodlists']),
+    ...mapState(['address', 'foodlists', 'userinfo']),
 
     /*
     根据 foodlists 一维数组生成一个2维数组

@@ -4,13 +4,17 @@
 import {
   RECEIVE_ADDRESS,
   RECEIVE_FOODLISTS,
-  RECEIVE_SHOPS
+  RECEIVE_SHOPS,
+  RECEIVE_USER_INFO,
+  RESET_USER_INFO
 } from './constType'
 
 import {
   reqAddress,
   reqFoodLists,
-  reqShops
+  reqShops,
+  reqUserInfo,
+  reqLogout
 } from '../api'
 
 export default {
@@ -48,6 +52,25 @@ export default {
       // 提交结果 commit({常量}，{参数})
       const shops = result.data
       commit(RECEIVE_SHOPS, { shops })
+    }
+  },
+  // 同步获取用户信息
+  syncUserinfo ({ commit }, userinfo) {
+    commit(RECEIVE_USER_INFO, { userinfo })
+  },
+  // 异步获取用户信息 页面刷新保存有用户登录状态
+  async getUserinfo ({ commit }) {
+    const result = await reqUserInfo()
+    if (result.code === 0) {
+      const userinfo = result.data
+      commit(RECEIVE_USER_INFO, { userinfo })
+    }
+  },
+  // 退出登录
+  async logout ({ commit }) {
+    const result = await reqLogout()
+    if (result.code === 0) {
+      commit(RESET_USER_INFO)
     }
   }
 }

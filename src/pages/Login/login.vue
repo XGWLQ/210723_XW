@@ -71,6 +71,7 @@
                 <img class="get_verification"
                      src="http://localhost:4000/captcha?time"
                      @click="getCaptcha"
+                     ref="captcha"
                      alt="captcha">
               </div>
             </div>
@@ -93,12 +94,14 @@
 </template>
 <script>
 import AlterTip from '../../components/AlterTip/altertip.vue'
+import { reqSendCode, reqPwdLogin, reqSmsLogin } from '../../api'
 export default {
   data () {
     return {
       showLogin: false, // true为短信登录 false为密码登录
       isShowPwd: false, // 是否显示密码 false不显示密码 true显示密码
       // 验证码部分的常量
+      count: 30,
       text: '获取验证码',
       offTimer: '',
       phone: '', // 手机号的位数
@@ -113,13 +116,12 @@ export default {
   },
   methods: {
     // 手机登录验证码倒计时和提交验证码的方法
-    getCode () {
+    async getCode () {
       // 按定时器ID的值判断是否可以点击
       if (!this.offTimer) {
-        let count = 30
         this.offTimer = setInterval(() => {
-          this.text = '已发送 (' + --count + 's)'
-          if (count <= 0) {
+          this.text = '已发送 (' + --this.count + 's)'
+          if (this.count <= 0) {
             this.text = '获取验证码'
             clearInterval(this.offTimer)
             // 为了30秒过后还可以点击，清空定时器ID
@@ -127,47 +129,91 @@ export default {
           }
         }, 1000)
         // 发送ajax请求
+        const result = await reqSendCode(this.phone)
+        // 判断是否成功
+        if (result.code === 1) { // 失败
+          // 显示提示 并停止定时器
+          this.showTip(result.msg)
+          if (this.count) {
+            // 时间清空 文字改变 停止定时器
+            this.count = 0
+            this.text = '获取验证码'
+            clearInterval(this.offTimer)
+            // 为了30秒过后还可以点击，清空定时器ID
+            this.offTimer = ''
+          }
+        }
       }
+    },
+    // 登录验证
+    async login () {
+      let result
+      // 先判断是什么方式登录方式
+      if (this.showLogin) { // 短信登录
+        const { rightPhone, phone, code } = this
+        // 判断信息是否合法
+        if (!rightPhone) {
+          // 手机号不正确
+          this.showTip('手机号格式不正确')
+          return
+        } else if (!/^\d{6}$/.test(code)) {
+          // 验证码必须是六位数
+          this.showTip('验证码必须是六位数')
+          return
+        }
+        // 异步发送ajax请求短信登录
+        result = await reqSmsLogin(phone, code)
+      } else { // 账号密码登录
+        const { pwd, name, captcha } = this
+        if (!name) {
+          // 用户名必须指定
+          this.showTip('用户名必须指定')
+          return
+        } else if (!pwd) {
+          // 密码必须指定
+          this.showTip('密码必须指定')
+          return
+        } else if (!captcha) {
+          // 图形验证码必须指定
+          this.showTip('图形验证码必须指定')
+          return
+        }
+        // 异步发送ajax请求账号密码登录
+        result = await reqPwdLogin({ pwd, name, captcha })
+      }
+      // 登录过去后也要停止计时
+      if (this.count) {
+        // 时间清空 文字改变 停止定时器
+        this.count = 0
+        this.text = '获取验证码'
+        clearInterval(this.offTimer)
+        // 为了30秒过后还可以点击，清空定时器ID
+        this.offTimer = ''
+      }
+      if (result.code === 0) { // 登录成功
+        // 用户信息保存到vuex总的state中
+        const user = result.data
+        this.$store.dispatch('syncUserinfo', user)
+        // 跳转到个人中心
+        this.$router.replace('/profile')
+      } else { // 登录失败
+        this.showTip(result.msg)// 提示失败
+        // 登录失败后再次刷新一次性验证码
+        this.getCaptcha()
+      }
+    },
+    // 关闭提示信息
+    closeTip () {
+      this.showTip('', false)
     },
     // 显示弹窗和文字
     showTip (text, show = true) {
       this.alterShow = show
       this.alertText = text
     },
-    // 登录验证
-    login () {
-      // 先判断是什么方式登录方式
-      if (this.showLogin) { // 短息登录
-        const { rightPhone, code } = this
-        // 判断信息是否合法
-        if (!rightPhone) {
-          // 手机号不正确
-          this.showTip('手机号格式不正确')
-        } else if (!/^\d{6}$/.test(code)) {
-          // 验证码必须是六位数
-          this.showTip('验证码必须是六位数')
-        }
-      } else { // 账号密码登录
-        const { pwd, name, captcha } = this
-        if (!name) {
-          // 用户名必须指定
-          this.showTip('用户名必须指定')
-        } else if (!pwd) {
-          // 密码必须指定
-          this.showTip('密码必须指定')
-        } else if (!captcha) {
-          // 图形验证码必须指定
-          this.showTip('图形验证码必须指定')
-        }
-      }
-    },
-    // 关闭提示信息
-    closeTip () {
-      this.showTip(' ', false)
-    },
     // 切换一次性验证码
-    getCaptcha (e) {
-      e.target.src = 'http://localhost:4000/captcha?time' + Date.now()
+    getCaptcha () {
+      this.$refs.captcha.src = 'http://localhost:4000/captcha?time' + Date.now()
     }
   },
   computed: {

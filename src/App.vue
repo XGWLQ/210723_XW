@@ -13,9 +13,10 @@ export default {
   mounted () {
     // this.$store.dispatch('getAddress')
     this.getAddress()
+    this.getUserinfo()
   },
   methods: {
-    ...mapActions(['getAddress'])
+    ...mapActions(['getAddress', 'getUserinfo'])
   },
   components: { FooterGuide }
 }

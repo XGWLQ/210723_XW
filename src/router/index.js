@@ -11,6 +11,7 @@ import Order from '../pages/Order/order.vue'
 import Search from '../pages/Search/search.vue'
 import Profile from '../pages/Profile/profile.vue'
 import Login from '../pages/Login/login.vue'
+import Userinfo from '../pages/Userinfo/userinfo.vue'
 // 声明使用插件
 Vue.use(VueRouter)
 
@@ -47,6 +48,9 @@ export default new VueRouter({
     }, {
       path: '/login',
       component: Login
+    }, {
+      path: '/userinfo',
+      component: Userinfo
     }
   ]
 })

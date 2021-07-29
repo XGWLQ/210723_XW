@@ -4,7 +4,9 @@
 import {
   RECEIVE_ADDRESS,
   RECEIVE_FOODLISTS,
-  RECEIVE_SHOPS
+  RECEIVE_SHOPS,
+  RECEIVE_USER_INFO,
+  RESET_USER_INFO
 } from './constType'
 
 export default {
@@ -16,5 +18,11 @@ export default {
   },
   [RECEIVE_SHOPS] (state, { shops }) {
     state.shops = shops
+  },
+  [RECEIVE_USER_INFO] (state, { userinfo }) {
+    state.userinfo = userinfo
+  },
+  [RESET_USER_INFO] (state) {
+    state.userinfo = {}
   }
 }

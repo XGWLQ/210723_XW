@@ -1,43 +1,50 @@
 <template>
-  <section class="profile">
-   <Headertop title="我的"/>
-    <section class="profile-number">
-      <router-link to='/login' class="profile-link"><div class="profile_image">
+  <div class="profile">
+    <Headertop title="我的" />
+    <div class="profile-number">
+      <router-link :to="userinfo._id?'/userinfo':'/login'"
+                   class="profile-link">
+        <div class="profile_image">
           <i class="iconfont icon-person"></i>
         </div>
         <div class="user-info">
-          <p class="user-info-top">登录/注册</p>
+          <!-- 如果是手机登录就显示手机号 -->
+          <p class="user-info-top"
+             v-if="userinfo.phone">{{userinfo.phone || '登录/注册'}}</p>
+          <p class="user-info-top"
+             v-else>{{userinfo.name || '登录/注册'}}</p>
           <p>
             <span class="user-icon">
               <i class="iconfont icon-shouji icon-mobile"></i>
             </span>
-            <span class="icon-mobile-number">暂无绑定手机号</span>
+            <span class="icon-mobile-number">{{userinfo.phone || '暂无绑定手机号'}}</span>
           </p>
         </div>
         <span class="arrow">
           <i class="iconfont icon-jiantou1"></i>
-        </span></router-link>
-    </section>
-    <section class="profile_info_data border-1px">
+        </span>
+      </router-link>
+    </div>
+    <div class="profile_info_data border-1px">
       <ul class="info_data_list">
         <a href="javascript:"
            class="info_data_link">
-          <span class="info_data_top"><span>0.00</span>元</span>
+          <span class="info_data_top"><span>99</span>元</span>
           <span class="info_data_bottom">我的余额</span>
         </a>
         <a href="javascript:"
            class="info_data_link">
-          <span class="info_data_top"><span>0</span>个</span>
+          <span class="info_data_top"><span>88</span>个</span>
           <span class="info_data_bottom">我的优惠</span>
         </a>
         <a href="javascript:"
            class="info_data_link">
-          <span class="info_data_top"><span>0</span>分</span>
+          <span class="info_data_top"><span>66</span>分</span>
           <span class="info_data_bottom">我的积分</span>
         </a>
       </ul>
-    </section>
-    <section class="profile_my_order border-1px">
+    </div>
+    <div class="profile_my_order border-1px">
       <!-- 我的订单 -->
       <a href='javascript:'
          class="my_order">
@@ -77,8 +84,8 @@
           </span>
         </div>
       </a>
-    </section>
-    <section class="profile_my_order border-1px">
+    </div>
+    <div class="profile_my_order border-1px">
       <!-- 服务中心 -->
       <a href="javascript:"
          class="my_order">
@@ -92,12 +99,33 @@
           </span>
         </div>
       </a>
-    </section>
-  </section>
+    </div>
+    <div class="profile_my_order border-1px"
+             v-if="userinfo._id">
+      <mt-button style="width:100%"
+                 type="danger"
+                 @click="logout">退出登录</mt-button>
+    </div>
+  </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+import { MessageBox, Toast } from 'mint-ui'
 import Headertop from '../../components/HeaderTop/headertop.vue'
+
 export default {
+  computed: {
+    ...mapState(['userinfo'])
+  },
+  methods: {
+    logout () {
+      MessageBox.confirm('确认退出？').then((action) => {
+        console.log(action)
+        this.$store.dispatch('logout')
+        Toast('登出成功')
+      })
+    }
+  },
   components: {
     Headertop
   }
@@ -108,63 +136,9 @@ export default {
 
 .profile { // 我的
   width: 100%;
-  overflow hidden
-  .header {
-    background-color: #02a774;
-    position: fixed;
-    z-index: 100;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 45px;
-
-    .header_search {
-      position: absolute;
-      left: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 10%;
-      height: 50%;
-
-      .icon-sousuo {
-        font-size: 25px;
-        color: #fff;
-      }
-    }
-
-    .header_title {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 50%;
-      color: #fff;
-      text-align: center;
-
-      .header_title_text {
-        font-size: 20px;
-        color: #fff;
-        display: block;
-      }
-    }
-
-    .header_login {
-      font-size: 14px;
-      color: #fff;
-      position: absolute;
-      right: 15px;
-      top: 50%;
-      transform: translateY(-50%);
-
-      .header_login_text {
-        color: #fff;
-      }
-    }
-  }
-
+  overflow: hidden;
   .profile-number {
     margin-top: 45.5px;
-
     .profile-link {
       clearFix();
       position: relative;

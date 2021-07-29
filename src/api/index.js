@@ -23,10 +23,10 @@ export const reqPwdLogin = ({ name, pwd, captcha }) => { return ajax(BASE_URL + 
 export const reqSendCode = (phone) => { return ajax(BASE_URL + '/sendcode', { phone }) }
 
 // [8、手机号验证码登陆](#8手机号验证码登陆)<br/>
-export const reqSms = (phone, code) => { return ajax(BASE_URL + '/login_sms', { phone, code }, 'POST') }
+export const reqSmsLogin = (phone, code) => { return ajax(BASE_URL + '/login_sms', { phone, code }, 'POST') }
 
 // [9、根据会话获取用户信息](#9根据会话获取用户信息)<br/>
-export const reqUserMes = () => { return ajax(BASE_URL + '/userinfol') }
+export const reqUserInfo = () => { return ajax(BASE_URL + '/userinfo') }
 
 // [10、用户登出](#10用户登出)<br/>
 export const reqLogout = () => { return ajax(BASE_URL + '/logout') }
