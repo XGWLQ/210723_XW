@@ -120,7 +120,6 @@ export default {
   methods: {
     logout () {
       MessageBox.confirm('确认退出？').then((action) => {
-        console.log(action)
         this.$store.dispatch('logout')
         Toast('登出成功')
       })

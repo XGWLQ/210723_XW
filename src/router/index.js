@@ -12,6 +12,10 @@ import Search from '../pages/Search/search.vue'
 import Profile from '../pages/Profile/profile.vue'
 import Login from '../pages/Login/login.vue'
 import Userinfo from '../pages/Userinfo/userinfo.vue'
+import Shop from '../pages/Shop/shop.vue'
+import ShopGoods from '../pages/Shop/ShopGoods/shopgoods.vue'
+import ShopInfo from '../pages/Shop/ShopInfo/shopinfo.vue'
+import ShopRating from '../pages/Shop/ShopRating/Shoprating.vue'
 // 声明使用插件
 Vue.use(VueRouter)
 
@@ -51,6 +55,26 @@ export default new VueRouter({
     }, {
       path: '/userinfo',
       component: Userinfo
+    },
+    // 商家列表的路由
+    {
+      path: '/shop',
+      component: Shop,
+      children: [
+        {
+          path: '/shop/goods',
+          component: ShopGoods
+        }, {
+          path: '/shop/info',
+          component: ShopInfo
+        }, {
+          path: '/shop/rating',
+          component: ShopRating
+        }, {
+          path: '',
+          redirect: '/shop/goods'
+        }
+      ]
     }
   ]
 })
