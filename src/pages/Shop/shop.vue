@@ -12,7 +12,11 @@
         <router-link to='/shop/info'>商家</router-link>
       </div>
     </div>
-    <router-view></router-view>
+    <!--  缓存路由组件对象 好处: 复用路由组件对象, 复用路由组件获取的后台数据 -->
+    <keep-alive>
+      <router-view />
+    </keep-alive>
+
   </div>
 
 </template>

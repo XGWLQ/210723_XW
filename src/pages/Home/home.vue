@@ -27,7 +27,7 @@
                v-for="(foodlist, index) in foodlists "
                :key="index">
               <div class="food_container">
-                <img :src="baseImageUrl + foodlist.image_url">
+                <img v-lazy="baseImageUrl + foodlist.image_url">
               </div>
               <span>{{foodlist.title}}</span>
             </a>

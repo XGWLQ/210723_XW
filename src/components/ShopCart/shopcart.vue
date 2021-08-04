@@ -159,7 +159,7 @@ export default {
           background: #2b343c;
 
           &.highlight {
-            background: $green;
+            background: #3BA776;
           }
 
           .icon-shopping_cart {
@@ -251,7 +251,7 @@ export default {
         width: 16px;
         height: 16px;
         border-radius: 50%;
-        background: $green;
+        background: #3BA776;
         transition: all 0.4s linear;
       }
     }

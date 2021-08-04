@@ -13,7 +13,7 @@
             <span class="text bottom-border-1px">
               <img class="icon"
                    v-if="item.icon"
-                   :src="item.icon">
+                   v-lazy="item.icon">
               {{item.name}}
             </span>
           </li>
@@ -35,7 +35,7 @@
                      @click="showFood(food)">
                   <img width="57"
                        height="57"
-                       :src="food.icon">
+                       v-lazy="food.icon">
                 </div>
                 <div class="content">
                   <h2 class="name">{{food.name}}</h2>
