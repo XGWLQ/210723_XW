@@ -15,3 +15,5 @@ export const INCREMENT_FOOD = 'increment_food' // 接收CartControl 中食物的
 export const DECREMENT_FOOD = 'decrement_food' // 接收CartControl 中食物的减少
 
 export const CLEARCART = 'clearCart' // 接收清空购物车总的食物
+
+export const RECEIVE_SEARCH_SHOPS = 'receive_search_shops' // 接收商品查询数组

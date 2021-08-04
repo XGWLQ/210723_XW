@@ -11,7 +11,8 @@ import {
   RECEIVE_RATINGS,
   RECEIVE_INFO,
   INCREMENT_FOOD,
-  DECREMENT_FOOD, CLEARCART
+  DECREMENT_FOOD, CLEARCART,
+  RECEIVE_SEARCH_SHOPS
 } from './constType'
 
 // ajax获取数据的方法
@@ -23,8 +24,8 @@ import {
   reqLogout,
   reqShopGoods,
   reqShopInfo,
-  reqShopRatings
-
+  reqShopRatings,
+  reqSearchShops
 } from '../api'
 
 export default {
@@ -92,11 +93,13 @@ export default {
     }
   },
   // 异步获取商家评价列表
-  async getShopRatings ({ commit }) {
+  async getShopRatings ({ commit }, callBack) {
     const result = await reqShopRatings()
     if (result.code === 0) {
       const ratings = result.data
       commit(RECEIVE_RATINGS, { ratings })
+      // 参数调用 穿过来的是一个方法直接调用
+      callBack && callBack()
     }
   },
   // 异步获取商家商品列表
@@ -117,7 +120,30 @@ export default {
       commit(DECREMENT_FOOD, { food })
     }
   },
+  // 清空购物车
   clearCart ({ commit }) {
     commit(CLEARCART)
+  },
+  //
+  // // 异步获取地址
+  async searchShops ({ commit, state }, {keyword}) {
+    // 拼接经纬度
+    let geohash = state.latitude + ',' + state.longitude
+    // 发送异步ajax请求
+    const result = await reqSearchShops(geohash, keyword)
+    if (result.code === 0) {
+      // 提交结果 mutation commit({常量}，{参数})
+      const searchShops = result.data
+      commit(RECEIVE_SEARCH_SHOPS, { searchShops })
+    }
   }
+  // 异步获取商家商品列表
+  // async searchShops ({ commit, state }, keyword) {
+  //   const geohash = state.latitude + ',' + state.longitude
+  //   const result = await reqSearchShops(geohash, keyword)
+  //   if (result.code === 0) {
+  //     const searchShops = result.data
+  //     commit(RECEIVE_SEARCH_SHOPS, { searchShops })
+  //   }
+  // }
 }

@@ -10,5 +10,11 @@ export default {
   // 订单总价钱
   allPrice (state) {
     return state.cartFood.reduce((prePrive, food) => { return prePrive + food.count * food.price }, 0)
+  },
+  // 评价满意数量
+  positive (state) {
+    return state.ratings.reduce((prerating, rating) => {
+      return prerating + (rating.rateType === 0 ? 1 : 0)
+    }, 0)
   }
 }

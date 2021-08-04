@@ -13,7 +13,8 @@ import {
   RECEIVE_INFO,
   INCREMENT_FOOD,
   DECREMENT_FOOD,
-  CLEARCART
+  CLEARCART,
+  RECEIVE_SEARCH_SHOPS
 } from './constType'
 
 export default {
@@ -73,5 +74,10 @@ export default {
     state.cartFood.forEach(food => { food.count = 0 })
     // 清空购物车
     state.cartFood = []
+  },
+
+  // 商品查询数组
+  [RECEIVE_SEARCH_SHOPS] (state, { searchShops }) {
+    state.searchShops = searchShops
   }
 }
