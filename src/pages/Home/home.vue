@@ -55,7 +55,7 @@ import Swiper from 'swiper'
 import { mapState } from 'vuex'
 import headertop from '../../components/HeaderTop/headertop.vue'
 import ShopList from '../../components/ShopList/shoplist.vue'
-import 'swiper/swiper-bundle.min.css'
+import 'swiper/swiper.min.css'
 
 export default {
   name: 'home',
